@@ -1,7 +1,19 @@
-FROM ubuntu
-RUN touch file1 file2 aws
-HELLO THIS IS EXTRA DATA WE ARE ADDING TO THIS FILE
-ADDING SOME MORE CONTENT
-THIS IS JENKINS CLASS, THANKS FOR JOINING
-475683973023@#$%^&*()
-ADDING SOME NEW CONTENT BY DEV-4
+////docker file db
+
+FROM mysql:5.7.25
+
+ENV MYSQL_ROOT_PASSWORD="devopspassword"
+ENV MYSQL_DATABASE="accounts"
+#dont expose passwords here
+ADD db_backup.sql docker-entrypoint-initdb.d/db_backup.sql
+
+
+////docker file app
+
+FROM tomcat:8-jre11
+
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+COPY target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
+
+CMD ["catalina.sh", "run"]
